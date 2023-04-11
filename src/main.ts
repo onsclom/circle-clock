@@ -46,7 +46,7 @@ type Particle = {
 }
 
 type GameState = {
-  type: "playing" | "gameover"
+  type: "instructions" | "playing" | "gameover"
   score: number
   ballAngle: number
   particles: Particle[]
@@ -56,7 +56,7 @@ type GameState = {
 }
 
 const state: GameState = {
-  type: "playing",
+  type: "instructions",
   score: 0,
   ballAngle: 0,
   particles: [],
@@ -86,6 +86,12 @@ const drawCircle = (
 }
 
 function draw(ctx: CanvasRenderingContext2D) {
+  if (state.type === "instructions") {
+    ctx.fillStyle = "black"
+    ctx.font = "bold 5px sans-serif"
+    ctx.fillText("spacebar or click", 50, 50)
+    return
+  }
   ctx.save()
   ctx.clearRect(0, 0, GAME_SIZE, GAME_SIZE)
   if (state.zoom > 0) {
@@ -141,6 +147,10 @@ function tick(dt: number, ctx: CanvasRenderingContext2D) {
 }
 
 function press() {
+  if (state.type === "instructions") {
+    state.type = "playing"
+    return
+  }
   if (state.type === "gameover") {
     infoA.style.display = "none"
     state.type = "playing"
