@@ -11,12 +11,24 @@
       <nav>
         <a href="/"><- back</a>
       </nav>
+      <p>High score: <span id="score-span">running JavaScript</span></p>
+      <script>
+        const scoreSpan = document.getElementById("score-span")
+        const score = localStorage.getItem("high-score")
+        if (!score) scoreSpan.innerText = "not found"
+        else scoreSpan.innerText = score
+      </script>
+
       <p>
-        <b>Circle clock</b> is inspired by
+        Circle clock is inspired by
         <a href="https://github.com/vasanthv/looptap">looptap</a> which is
         inspired by <a href="https://coogyloop.com/">coogyloop</a>.
       </p>
-      <p>Open source and available on <a href="">GitHub</a>.</p>
+      <p>
+        Open source and available on
+        <a href="https://github.com/onsclom/circle-clock">GitHub</a>.
+      </p>
+      <p>Made by <a href="https://www.onsclom.net/">Austin Merrick</a>.</p>
     </main>
   </body>
 </html>

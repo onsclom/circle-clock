@@ -1,5 +1,1 @@
-- fill out about with info
-- add highscore
 - make into proper PWA
-- seperate into own repo and host on vercel?
-- volume / mute toggle

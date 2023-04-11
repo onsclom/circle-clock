@@ -1,14 +1,15 @@
 import { Howl } from "howler"
 
 const GAME_SIZE = 100
-const startSpeed = 0.004
-const maxSpeed = 0.012
+const START_SPEED = 0.004
+const MAX_SPEED = 0.012
+const ZOOM_DURATION = 300
+const ZOOM_STRENGTH = 0.05
 const RING_MARGIN = 5
 const BALL_RADIUS = 5
-const ZOOM_DURATION = 300
 const RING_RADIUS = GAME_SIZE / 2 - BALL_RADIUS - RING_MARGIN
 const INNER_SIZE = 0.75
-const ZOOM_STRENGTH = 0.05
+const PARTICLE_MAX_AGE = 0.1
 
 const hitmarkerSound = new Howl({ src: ["/hitmarker.mp3"] })
 const missSound = new Howl({ src: ["/miss.wav"] })
@@ -104,7 +105,7 @@ function draw(ctx: CanvasRenderingContext2D) {
 
   const MIN_RADIUS = 1
   state.particles.forEach((p) => {
-    const radius = BALL_RADIUS * (1 - p.age / PARTICLE_AGE)
+    const radius = BALL_RADIUS * (1 - p.age / PARTICLE_MAX_AGE)
     const pos = angleToPos(p.angle)
     if (radius > MIN_RADIUS) drawCircle(ctx, pos.x, pos.y, radius, fgColor)
   })
@@ -124,9 +125,7 @@ function draw(ctx: CanvasRenderingContext2D) {
 }
 
 const curSpeed = (score: number) =>
-  maxSpeed - (maxSpeed - startSpeed) / (1 + score * 0.01)
-
-const PARTICLE_AGE = 0.1
+  MAX_SPEED - (MAX_SPEED - START_SPEED) / (1 + score * 0.01)
 
 function tick(dt: number, ctx: CanvasRenderingContext2D) {
   if (state.type === "playing")
@@ -137,7 +136,7 @@ function tick(dt: number, ctx: CanvasRenderingContext2D) {
     angle: state.ballAngle,
   })
   state.particles.forEach((p) => (p.age += dt / 1000))
-  state.particles = state.particles.filter((p) => p.age <= PARTICLE_AGE)
+  state.particles = state.particles.filter((p) => p.age <= PARTICLE_MAX_AGE)
   draw(ctx)
 }
 
@@ -157,6 +156,11 @@ function press() {
     state.zoom = 1
     state.type = "gameover"
     infoA.style.display = "block"
+    if (
+      localStorage["high-score"] === undefined ||
+      state.score > Number(localStorage["high-score"])
+    )
+      localStorage["high-score"] = state.score.toString()
   }
 }
 
