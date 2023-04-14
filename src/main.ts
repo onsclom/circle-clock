@@ -87,11 +87,14 @@ const drawCircle = (
 
 function draw(ctx: CanvasRenderingContext2D) {
   if (state.type === "instructions") {
+    ctx.save()
     ctx.fillStyle = "black"
     ctx.font = "bold 5px sans-serif"
     ctx.fillText("spacebar or click", 50, 50)
+    ctx.restore()
     return
   }
+  
   ctx.save()
   ctx.clearRect(0, 0, GAME_SIZE, GAME_SIZE)
   if (state.zoom > 0) {
